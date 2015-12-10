@@ -69,7 +69,6 @@ func untappdRequest(searchString string) (untappdData *UntappdResponse, err erro
 	q.Set("q", searchString)
 	requestURL.RawQuery = q.Encode()
 
-	requestURL.Path = "/v4/search/beer"
 	res, err := http.Get(requestURL.String())
 	if err != nil {
 		return untappdResponse, err
