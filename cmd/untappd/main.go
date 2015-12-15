@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -140,7 +141,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		beer := untappdData.Beer.Beers.Items[0].Beer
 		newAttachment := SlackAttachment{
 			Title:    beer.Name,
-			Text:     beer.Description,
+			Text:     fmt.Sprintf("IBU:%.2f ABV:%.2f\n%s", beer.Ibu, beer.Abv, beer.Description),
 			ImageURL: beer.Label,
 		}
 		attachments := append([]SlackAttachment{}, newAttachment)
