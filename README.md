@@ -30,6 +30,8 @@ The server will do a lookup on the Untappd API for the given `text` in the Slack
 
 ### Example
 
+**Warning:** This example is for illustrative purposes only. Refer to the actual documentation above for the specific request/response formats.
+
 The following request:
 
 ```
@@ -51,3 +53,7 @@ will generate the following JSON response:
   ]
 }
 ```
+
+which if configured correctly in slack will produce the following post:
+
+![Slack Untappd Preview](examples/response.png)
