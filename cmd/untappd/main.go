@@ -29,8 +29,9 @@ type UntappdBeer struct {
 	ID          int     `json:"bid"`
 	Name        string  `json:"beer_name"`
 	Label       string  `json:"beer_label"`
-	Ibu         float64 `json:"beer_ibu"`
+	Ibu         int     `json:"beer_ibu"`
 	Abv         float64 `json:"beer_abv"`
+	Style       string  `json:"beer_style"`
 	Description string  `json:"beer_description"`
 }
 
@@ -151,7 +152,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 		newAttachment := SlackAttachment{
 			Title:    fmt.Sprintf("<%s|%s>", untappdURL, beer.Name),
-			Text:     fmt.Sprintf("IBU:%.2f ABV:%.2f\n%s", beer.Ibu, beer.Abv, beer.Description),
+			Text:     fmt.Sprintf("%s | %d IBU | %0.0f%% ABV \n%s", beer.Style, beer.Ibu, beer.Abv, beer.Description),
 			ImageURL: beer.Label,
 		}
 		attachments := append([]SlackAttachment{}, newAttachment)
