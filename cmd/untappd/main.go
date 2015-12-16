@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 )
 
 type SlackAttachment struct {
@@ -24,6 +25,7 @@ type SlackResponse struct {
 }
 
 type UntappdBeer struct {
+	ID          int     `json:"bid"`
 	Name        string  `json:"beer_name"`
 	Label       string  `json:"beer_label"`
 	Ibu         float64 `json:"beer_ibu"`
@@ -128,7 +130,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// set the default response data
 	response := &SlackResponse{
 		ResponseType: "in_channel",
 		Text:         "Your Untappd Response",
@@ -139,8 +140,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		response.Text = "No Results Found"
 	} else {
 		beer := untappdData.Beer.Beers.Items[0].Beer
+
+		slug := strings.Replace(strings.ToLower(beer.Name), " ", "-", -1)
+		untappdURL := fmt.Sprintf("https://untappd.com/b/%s/%d", slug, beer.ID)
+
 		newAttachment := SlackAttachment{
-			Title:    beer.Name,
+			Title:    fmt.Sprintf("<%s|%s>", untappdURL, beer.Name),
 			Text:     fmt.Sprintf("IBU:%.2f ABV:%.2f\n%s", beer.Ibu, beer.Abv, beer.Description),
 			ImageURL: beer.Label,
 		}
