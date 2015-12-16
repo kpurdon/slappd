@@ -35,10 +35,15 @@ type UntappdBeer struct {
 	Description string  `json:"beer_description"`
 }
 
+type UntappdBrewery struct {
+	Name string `json:"brewery_name"`
+}
+
 type UntappdBeerResponse struct {
 	Beers struct {
 		Items []struct {
-			Beer *UntappdBeer `json:"beer"`
+			Beer    *UntappdBeer    `json:"beer"`
+			Brewery *UntappdBrewery `json:"brewery"`
 		}
 	}
 }
@@ -156,11 +161,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		response.Text = "No Results Found"
 	} else {
 		beer := untappdData.Beer.Beers.Items[0].Beer
+		brewery := untappdData.Beer.Beers.Items[0].Brewery
 
 		untappdURL := fmt.Sprintf("https://untappd.com/b/%s/%d", slug(beer.Name), beer.ID)
 
 		newAttachment := SlackAttachment{
-			Title:    fmt.Sprintf("<%s|%s>", untappdURL, beer.Name),
+			Title:    fmt.Sprintf("<%s|%s>", untappdURL, fmt.Sprintf("%s %s", brewery.Name, beer.Name)),
 			Text:     fmt.Sprintf("%s | %d IBU | %0.0f%% ABV \n%s", beer.Style, beer.Ibu, beer.Abv, beer.Description),
 			ImageURL: beer.Label,
 		}

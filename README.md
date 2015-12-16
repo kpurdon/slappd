@@ -46,7 +46,7 @@ will generate the following JSON response:
   text: "Your Untappd Response",
   attachments: [
     {
-      title: "<https://untappd.com/b/unfiltered-wheat-beer/10501|Unfiltered Wheat Beer>",
+      title: "<https://untappd.com/b/unfiltered-wheat-beer/10501|Boulevard Brewing Co. Unfiltered Wheat Beer>",
       text: "Pale Wheat Ale - American | 14 IBU | 4% ABV Boulevard Unfiltered Wheat Beer is a lively, refreshing ale with a natural citrusy flavor and distinctive cloudy appearance. This easy drinking American-style wheat beer has become our most popular offering, and the best-selling craft beer in the Midwest.",
       image_url: "https://untappd.akamaized.net/site/beer_logos/beer-_10501_sm_223bb99cc9949e694ada7d88309095.jpeg"
     }
