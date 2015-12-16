@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -88,6 +89,11 @@ func untappdRequest(searchString string) (untappdData *UntappdResponse, err erro
 
 }
 
+func slug(s string) string {
+	var re = regexp.MustCompile("[^a-z0-9]+")
+	return strings.Trim(re.ReplaceAllString(strings.ToLower(s), "-"), "-")
+}
+
 func handler(w http.ResponseWriter, r *http.Request) {
 
 	slackToken := os.Getenv("SLACK_TOKEN")
@@ -141,8 +147,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		beer := untappdData.Beer.Beers.Items[0].Beer
 
-		slug := strings.Replace(strings.ToLower(beer.Name), " ", "-", -1)
-		untappdURL := fmt.Sprintf("https://untappd.com/b/%s/%d", slug, beer.ID)
+		untappdURL := fmt.Sprintf("https://untappd.com/b/%s/%d", slug(beer.Name), beer.ID)
 
 		newAttachment := SlackAttachment{
 			Title:    fmt.Sprintf("<%s|%s>", untappdURL, beer.Name),
