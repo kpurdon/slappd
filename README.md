@@ -1,6 +1,6 @@
 # Slack Untappd
 
-A [Slack](https://slack.com/) [slash command server](https://api.slack.com/slash-commands) for searching for beer information via the [Untappd Beer Search API](https://untappd.com/api/docs#userbeers).
+A [Slack](https://slack.com/) [(Slash Command Server)](https://api.slack.com/slash-commands) for searching the [Untappd Beer Search API](https://untappd.com/api/docs#userbeers) for information about a given beer.
 
 ## Basic Usage
 
@@ -10,7 +10,7 @@ A [Slack](https://slack.com/) [slash command server](https://api.slack.com/slash
 
 The following environment variables must be set:
 
-* `SLACK_TOKEN` - The token assigned to the slash command integration
+* `SLACK_TOKEN` - The token assigned to the slash command integration (can contain multiple comma seperated tokens)
 * `UNTAPPD_CLIENT_ID` - Your Untappd API client ID
 * `UNTAPPD_CLIENT_SECRET` - Your Untappd API client secret token
 
@@ -35,7 +35,7 @@ The server will do a lookup on the Untappd API for the given `text` in the Slack
 The following request:
 
 ```
-http://localhost:3000/?token=123Token456&user_name=kpurdon&text=Boulevard+Wheat
+[server_url]/?token=123Token456&user_name=kpurdon&text=Boulevard+Wheat
 ```
 
 will generate the following JSON response:
@@ -46,8 +46,8 @@ will generate the following JSON response:
   text: "Your Untappd Response",
   attachments: [
     {
-      title: "Unfiltered Wheat Beer",
-      text: "Boulevard Unfiltered Wheat Beer is a lively, refreshing ale with a     natural citrusy flavor and distinctive cloudy appearance. This easy drinking American-style wheat beer has become our most popular offering, and the best-selling craft beer in the Midwest.",
+      title: "<https://untappd.com/b/unfiltered-wheat-beer/10501|Unfiltered Wheat Beer>",
+      text: "Pale Wheat Ale - American | 14 IBU | 4% ABV Boulevard Unfiltered Wheat Beer is a lively, refreshing ale with a natural citrusy flavor and distinctive cloudy appearance. This easy drinking American-style wheat beer has become our most popular offering, and the best-selling craft beer in the Midwest.",
       image_url: "https://untappd.akamaized.net/site/beer_logos/beer-_10501_sm_223bb99cc9949e694ada7d88309095.jpeg"
     }
   ]
