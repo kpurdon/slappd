@@ -110,9 +110,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if slackToken != r.FormValue("token") {
-		http.Error(w, "INVALID_TOKEN", http.StatusUnauthorized)
-		return
+	slackTokens := strings.Split(slackToken, ",")
+	for _, token := range slackTokens {
+		if token != reqSlackToken {
+			http.Error(w, "INVALID_TOKEN", http.StatusUnauthorized)
+			return
+		}
 	}
 
 	reqUserName := r.FormValue("user_name")
