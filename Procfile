@@ -1,1 +1,1 @@
-web: untappd
+web: slappd
