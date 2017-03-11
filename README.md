@@ -1,4 +1,4 @@
-# Slack Untappd
+# Slappd (Slack Untappd)
 
 A [Slack](https://slack.com/) [(Slash Command Server)](https://api.slack.com/slash-commands) for searching the [Untappd Beer Search API](https://untappd.com/api/docs#userbeers) for information about a given beer.
 
