@@ -1,3 +1,6 @@
+[![GoDoc](https://godoc.org/github.com/kpurdon/slappd?status.svg)](https://godoc.org/github.com/kpurdon/slappd)
+[![Go Report Card](https://goreportcard.com/badge/github.com/kpurdon/slappd)](https://goreportcard.com/report/github.com/kpurdon/slappd)
+
 # Slappd (Slack Untappd)
 
 A [Slack](https://slack.com/) [(Slash Command Server)](https://api.slack.com/slash-commands) for searching the [Untappd Beer Search API](https://untappd.com/api/docs#userbeers) for information about a given beer.
