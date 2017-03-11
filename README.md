@@ -27,6 +27,10 @@ The server expects a POST request from Slack with the following form values:
 
 These values should be present in the default slack POST in addition to other non-used values.
 
+# WARNING (03-11-2017)
+
+Everything below is slightly out of date. Will be updating this soon.
+
 ### Response
 
 The server will do a lookup on the Untappd API for the given `text` in the Slack POST. If no result is found an `ephemeral` (only displayed to requesting user) message will be returned stating that no results were found. If results are found an `in_channel` (displayed to anyone in the channel) message will be returned.
