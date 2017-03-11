@@ -71,19 +71,24 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sr := slack.NewResponse()
-	for _, item := range ud.Response.Beers.Items {
-		attachment := &slack.Attachment{
-			Title:    item.Title(),
-			Text:     item.Text(),
-			ImageURL: item.Beer.Label,
-		}
-		sr.Attachments = append(sr.Attachments, attachment)
+	var sr *slack.Response
+	if len(ud.Response.Beers.Items) != 0 {
+		sr = slack.NewResponse()
+		for _, item := range ud.Response.Beers.Items {
+			attachment := &slack.Attachment{
+				Title:    item.Title(),
+				Text:     item.Text(),
+				ImageURL: item.Beer.Label,
+			}
+			sr.Attachments = append(sr.Attachments, attachment)
 
-		// TODO: add in actions to select from the list of options
-		// for now break after the first attachment so we only return
-		// a single result
-		break
+			// TODO: add in actions to select from the list of options
+			// for now break after the first attachment so we only return
+			// a single result
+			break
+		}
+	} else {
+		sr = slack.NewEmptyResultsResponse()
 	}
 
 	b, err := json.Marshal(sr)

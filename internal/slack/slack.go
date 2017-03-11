@@ -22,3 +22,11 @@ func NewResponse() *Response {
 		Attachments:  make([]*Attachment, 0),
 	}
 }
+
+// NewEmptyResultsResponse creates a new response that idicates no search results were found
+func NewEmptyResultsResponse() *Response {
+	return &Response{
+		ResponseType: "ephemeral",
+		Text:         "No Results Found",
+	}
+}
