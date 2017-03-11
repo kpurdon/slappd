@@ -12,6 +12,8 @@ import (
 	"github.com/kpurdon/slappd/internal/untappd"
 )
 
+const callbackID = "slappd"
+
 func isAuthorized(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		st := os.Getenv("SLACK_TOKEN")
@@ -56,7 +58,48 @@ func isAuthorized(next http.Handler) http.Handler {
 	})
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
+func selectHandler(w http.ResponseWriter, r *http.Request) {
+	payload := r.FormValue("payload")
+
+	var action slack.ActionPayload
+	if err := json.Unmarshal([]byte(payload), &action); err != nil {
+		log.Printf("invalid action json: %v", err)
+		http.Error(w, http.StatusText(400), 400)
+		return
+	}
+
+	if action.CallbackID != callbackID {
+		log.Printf("invalid callback_id: %s", action.CallbackID)
+		http.Error(w, http.StatusText(400), 400)
+		return
+	}
+
+	id, err := untappd.Info(action.Actions[0].Value)
+	if err != nil {
+		log.Printf("%+v", err)
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+
+	sr := slack.NewResponse()
+	attachment := &slack.Attachment{
+		Title:    id.Title(),
+		Text:     id.Text(),
+		ImageURL: id.Response.Beer.Label,
+	}
+	sr.Attachments = append(sr.Attachments, attachment)
+
+	b, err := json.Marshal(sr)
+	if err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(b)
+}
+
+func searchHandler(w http.ResponseWriter, r *http.Request) {
 	searchText := r.FormValue("text")
 	if searchText == "" {
 		log.Printf("missing form value: text")
@@ -73,19 +116,25 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	var sr *slack.Response
 	if len(ud.Response.Beers.Items) != 0 {
+		var count int
 		sr = slack.NewResponse()
 		for _, item := range ud.Response.Beers.Items {
+			count++
 			attachment := &slack.Attachment{
-				Title:    item.Title(),
-				Text:     item.Text(),
-				ImageURL: item.Beer.Label,
+				Title: item.Title(),
+				// Text:     item.Text(),
+				// ImageURL: item.Beer.Label,
+				CallbackID: callbackID,
+				Actions:    []*slack.Action{slack.NewAction(item.Beer.ID)},
 			}
 			sr.Attachments = append(sr.Attachments, attachment)
 
 			// TODO: add in actions to select from the list of options
 			// for now break after the first attachment so we only return
 			// a single result
-			break
+			if count == 5 {
+				break
+			}
 		}
 	} else {
 		sr = slack.NewEmptyResultsResponse()
@@ -111,6 +160,7 @@ func main() {
 
 	log.Printf("slappd listening on 0.0.0.0%s", addr)
 
-	http.Handle("/", isAuthorized(http.HandlerFunc(handler)))
+	http.Handle("/", isAuthorized(http.HandlerFunc(searchHandler)))
+	http.Handle("/select", http.HandlerFunc(selectHandler))
 	http.ListenAndServe(addr, nil)
 }

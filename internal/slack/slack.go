@@ -1,10 +1,32 @@
 package slack
 
+import "fmt"
+
+// Action ...
+type Action struct {
+	Name  string `json:"name"`
+	Text  string `json:"text"`
+	Type  string `json:"type"`
+	Value string `json:"value"`
+}
+
+// NewAction creats a new action item
+func NewAction(value int) *Action {
+	return &Action{
+		Name:  "beerSelector",
+		Text:  "Select This Beer",
+		Type:  "button",
+		Value: fmt.Sprintf("%d", value),
+	}
+}
+
 // Attachment ...
 type Attachment struct {
-	Title    string `json:"title,omitempty"`
-	Text     string `json:"text,omitempty"`
-	ImageURL string `json:"image_url,omitempty"`
+	Title      string    `json:"title,omitempty"`
+	Text       string    `json:"text,omitempty"`
+	ImageURL   string    `json:"image_url,omitempty"`
+	CallbackID string    `json:"callback_id"`
+	Actions    []*Action `json:"actions,omitempty"`
 }
 
 // Response ...
@@ -29,4 +51,12 @@ func NewEmptyResultsResponse() *Response {
 		ResponseType: "ephemeral",
 		Text:         "No Results Found",
 	}
+}
+
+// ActionPayload ...
+type ActionPayload struct {
+	Actions []struct {
+		Value string `json:"value"`
+	} `json:"actions"`
+	CallbackID string `json:"callback_id"`
 }
