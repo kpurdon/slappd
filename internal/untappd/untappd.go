@@ -3,7 +3,6 @@ package untappd
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -129,7 +128,6 @@ func Search(searchStr string) (*SearchResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Print(u.String())
 
 	var ur SearchResponse
 	if err := json.NewDecoder(res.Body).Decode(&ur); err != nil {
@@ -161,7 +159,6 @@ func Info(id string) (*InfoResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Print(u.String())
 
 	var ir InfoResponse
 	if err := json.NewDecoder(res.Body).Decode(&ir); err != nil {
