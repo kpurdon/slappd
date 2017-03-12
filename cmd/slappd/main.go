@@ -1,12 +1,15 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 	"strings"
+	"time"
 
 	"github.com/kpurdon/slappd/internal/slack"
 	"github.com/kpurdon/slappd/internal/untappd"
@@ -151,6 +154,9 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	stopChan := make(chan os.Signal)
+	signal.Notify(stopChan, os.Interrupt)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -158,9 +164,24 @@ func main() {
 
 	addr := fmt.Sprintf(":%s", port)
 
-	log.Printf("slappd listening on 0.0.0.0%s", addr)
-
 	http.Handle("/", isAuthorized(http.HandlerFunc(searchHandler)))
 	http.Handle("/select", http.HandlerFunc(selectHandler))
-	http.ListenAndServe(addr, nil)
+
+	server := &http.Server{Addr: addr}
+
+	go func() {
+		log.Printf("slappd listening on 0.0.0.0%s", addr)
+		if err := server.ListenAndServe(); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	<-stopChan
+
+	log.Printf("slappd shutting down...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	server.Shutdown(ctx)
 }
