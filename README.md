@@ -1,15 +1,21 @@
 [![GoDoc](https://godoc.org/github.com/kpurdon/slappd?status.svg)](https://godoc.org/github.com/kpurdon/slappd)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kpurdon/slappd)](https://goreportcard.com/report/github.com/kpurdon/slappd)
 
+**If you are interested in donating public hosting for this application it would be very easy to let anyone on slack use this with the click of a button. Right now I am running it on a private host for only a couple slack teams.**
+
 # Slappd (Slack Untappd)
 
-A [Slack](https://slack.com/) [(Slash Command Server)](https://api.slack.com/slash-commands) for searching the [Untappd Beer Search API](https://untappd.com/api/docs#userbeers) for information about a given beer.
+A [Slack](https://slack.com/) [(Application)](https://api.slack.com/apps) for searching the [Untappd Beer Search API](https://untappd.com/api/docs#userbeers) for information about a given beer.
+
+![Slappd Preview GIF](examples/slappd.gif)
 
 ## Basic Usage
 
 1. Register for [Untappd API Credentials](https://untappd.com/api/register?register=new)
 2. Get the server running somewhere on a public host
-3. Configure a Slack Slash Command. [See Slack Docs](https://api.slack.com/slash-commands)
+3. Configure a Slack Application. [See Slack Docs](https://api.slack.com/slash-commands).
+
+TODO (03-13-2017): Add more details about Slack Application configuration.
 
 The following environment variables must be set:
 
@@ -27,17 +33,11 @@ The server expects a POST request from Slack with the following form values:
 
 These values should be present in the default slack POST in addition to other non-used values.
 
-# WARNING (03-11-2017)
-
-Everything below is slightly out of date. Will be updating this soon.
-
 ### Response
 
 The server will do a lookup on the Untappd API for the given `text` in the Slack POST. If no result is found an `ephemeral` (only displayed to requesting user) message will be returned stating that no results were found. If results are found an `in_channel` (displayed to anyone in the channel) message will be returned.
 
 ### Example
-
-**Warning:** This example is for illustrative purposes only. Refer to the actual documentation above for the specific request/response formats.
 
 The following request:
 
@@ -49,18 +49,77 @@ will generate the following JSON response:
 
 ```
 {
-  response_type: "in_channel",
-  text: "Your Untappd Response",
-  attachments: [
-    {
-      title: "<https://untappd.com/b/unfiltered-wheat-beer/10501|Boulevard Brewing Co. Unfiltered Wheat Beer>",
-      text: "Pale Wheat Ale - American | 14 IBU | 4% ABV Boulevard Unfiltered Wheat Beer is a lively, refreshing ale with a natural citrusy flavor and distinctive cloudy appearance. This easy drinking American-style wheat beer has become our most popular offering, and the best-selling craft beer in the Midwest.",
-      image_url: "https://untappd.akamaized.net/site/beer_logos/beer-_10501_sm_223bb99cc9949e694ada7d88309095.jpeg"
-    }
-  ]
+    "attachments": [
+        {
+            "actions": [
+                {
+                    "name": "beerSelector",
+                    "text": "Select This Beer",
+                    "type": "button",
+                    "value": "10501"
+                }
+            ],
+            "callback_id": "slappd",
+            "title": "<https://untappd.com/b/unfiltered-wheat-beer/10501|Boulevard Brewing Co. Unfiltered Wheat Beer>"
+        },
+        {
+            "actions": [
+                {
+                    "name": "beerSelector",
+                    "text": "Select This Beer",
+                    "type": "button",
+                    "value": "33035"
+                }
+            ],
+            "callback_id": "slappd",
+            "title": "<https://untappd.com/b/80-acre-hoppy-wheat-beer/33035|Boulevard Brewing Co. 80-Acre Hoppy Wheat Beer>"
+        },
+        {
+            "actions": [
+                {
+                    "name": "beerSelector",
+                    "text": "Select This Beer",
+                    "type": "button",
+                    "value": "12189"
+                }
+            ],
+            "callback_id": "slappd",
+            "title": "<https://untappd.com/b/harvest-dance-wheat-wine/12189|Boulevard Brewing Co. Harvest Dance Wheat Wine>"
+        },
+        {
+            "actions": [
+                {
+                    "name": "beerSelector",
+                    "text": "Select This Beer",
+                    "type": "button",
+                    "value": "864248"
+                }
+            ],
+            "callback_id": "slappd",
+            "title": "<https://untappd.com/b/harvest-dance-wheat-wine-2014/864248|Boulevard Brewing Co. Harvest Dance Wheat Wine (2014)>"
+        },
+        {
+            "actions": [
+                {
+                    "name": "beerSelector",
+                    "text": "Select This Beer",
+                    "type": "button",
+                    "value": "267421"
+                }
+            ],
+            "callback_id": "slappd",
+            "title": "<https://untappd.com/b/harvest-dance-wheat-wine-2012/267421|Boulevard Brewing Co. Harvest Dance Wheat Wine (2012)>"
+        }
+    ],
+    "response_type": "in_channel",
+    "text": "Your Untappd Response"
 }
 ```
 
 which if configured correctly in slack will produce the following post:
 
-![Slack Untappd Preview](examples/response.png)
+![Slappd Search Response](examples/search_response.png)
+
+then after the user selects the desired result the message will be replaced with the following post:
+
+![Slappd Select Response](examples/select_response.png)
