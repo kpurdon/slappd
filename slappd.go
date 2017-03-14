@@ -89,16 +89,17 @@ func selectHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sr := slack.NewResponse()
+	msg := slack.NewMessage()
 	attachment := &slack.Attachment{
 		Title:    id.Title(),
 		Text:     id.Text(),
 		ImageURL: id.Response.Beer.Label,
 	}
-	sr.Attachments = append(sr.Attachments, attachment)
+	msg.Attachments = append(msg.Attachments, attachment)
 
-	b, err := json.Marshal(sr)
+	b, err := json.Marshal(msg)
 	if err != nil {
+		log.Printf("%+v", err)
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
@@ -122,7 +123,7 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sr := slack.NewResponse()
+	msg := slack.NewMessage()
 	if len(ud.Response.Beers.Items) != 0 {
 		var count int
 		for _, item := range ud.Response.Beers.Items {
@@ -133,18 +134,17 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 				CallbackID: callbackID,
 				Actions:    []*slack.Action{slack.NewAction(item.Beer.ID)},
 			}
-
-			sr.Attachments = append(sr.Attachments, attachment)
+			msg.Attachments = append(msg.Attachments, attachment)
 
 			if count == MaxResults {
 				break
 			}
 		}
 	} else {
-		sr = slack.NewEmptyResponse()
+		msg = slack.NewEmptyMessage()
 	}
 
-	b, err := json.Marshal(sr)
+	b, err := json.Marshal(msg)
 	if err != nil {
 		log.Printf("%+v", err)
 		http.Error(w, http.StatusText(500), 500)
