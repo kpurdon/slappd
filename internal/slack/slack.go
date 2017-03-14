@@ -43,7 +43,6 @@ type Message struct {
 func NewMessage() *Message {
 	return &Message{
 		ResponseType: "in_channel",
-		Text:         "Your Untappd Response",
 		Attachments:  make([]*Attachment, 0),
 	}
 }
