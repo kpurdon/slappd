@@ -37,89 +37,12 @@ These values should be present in the default slack POST in addition to other no
 
 The server will do a lookup on the Untappd API for the given `text` in the Slack POST. If no result is found an `ephemeral` (only displayed to requesting user) message will be returned stating that no results were found. If results are found an `in_channel` (displayed to anyone in the channel) message will be returned.
 
-### Example
+### Interactions
 
-The following request:
-
-```
-[server_url]/?token=123Token456&user_name=kpurdon&text=Boulevard+Wheat
-```
-
-will generate the following JSON response:
-
-```
-{
-    "attachments": [
-        {
-            "actions": [
-                {
-                    "name": "beerSelector",
-                    "text": "Select This Beer",
-                    "type": "button",
-                    "value": "10501"
-                }
-            ],
-            "callback_id": "slappd",
-            "title": "<https://untappd.com/b/unfiltered-wheat-beer/10501|Boulevard Brewing Co. Unfiltered Wheat Beer>"
-        },
-        {
-            "actions": [
-                {
-                    "name": "beerSelector",
-                    "text": "Select This Beer",
-                    "type": "button",
-                    "value": "33035"
-                }
-            ],
-            "callback_id": "slappd",
-            "title": "<https://untappd.com/b/80-acre-hoppy-wheat-beer/33035|Boulevard Brewing Co. 80-Acre Hoppy Wheat Beer>"
-        },
-        {
-            "actions": [
-                {
-                    "name": "beerSelector",
-                    "text": "Select This Beer",
-                    "type": "button",
-                    "value": "12189"
-                }
-            ],
-            "callback_id": "slappd",
-            "title": "<https://untappd.com/b/harvest-dance-wheat-wine/12189|Boulevard Brewing Co. Harvest Dance Wheat Wine>"
-        },
-        {
-            "actions": [
-                {
-                    "name": "beerSelector",
-                    "text": "Select This Beer",
-                    "type": "button",
-                    "value": "864248"
-                }
-            ],
-            "callback_id": "slappd",
-            "title": "<https://untappd.com/b/harvest-dance-wheat-wine-2014/864248|Boulevard Brewing Co. Harvest Dance Wheat Wine (2014)>"
-        },
-        {
-            "actions": [
-                {
-                    "name": "beerSelector",
-                    "text": "Select This Beer",
-                    "type": "button",
-                    "value": "267421"
-                }
-            ],
-            "callback_id": "slappd",
-            "title": "<https://untappd.com/b/harvest-dance-wheat-wine-2012/267421|Boulevard Brewing Co. Harvest Dance Wheat Wine (2012)>"
-        }
-    ],
-    "response_type": "in_channel",
-    "text": "Your Untappd Response"
-}
-```
-
-which if configured correctly in slack will produce the following post:
+A user will type `/untappd Boulevard Wheat` which will produce:
 
 ![Slappd Search Response](examples/search_response.png)
 
-then after the user selects the desired result the message will be replaced with the following post:
+a user then has the option to select the desired beer which will produce:
 
 ![Slappd Select Response](examples/select_response.png)
