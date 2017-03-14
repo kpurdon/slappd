@@ -45,8 +45,8 @@ func NewResponse() *Response {
 	}
 }
 
-// NewEmptyResultsResponse creates a new response that idicates no search results were found
-func NewEmptyResultsResponse() *Response {
+// NewEmptyResponse creates a new response that idicates no search results were found
+func NewEmptyResponse() *Response {
 	return &Response{
 		ResponseType: "ephemeral",
 		Text:         "No Results Found",

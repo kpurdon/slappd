@@ -15,7 +15,12 @@ import (
 	"github.com/kpurdon/slappd/internal/untappd"
 )
 
-const callbackID = "slappd"
+const (
+	callbackID = "slappd"
+
+	// MaxResults is the max number of results that are shown to the user
+	MaxResults = 5
+)
 
 func isAuthorized(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -117,34 +122,31 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var sr *slack.Response
+	sr := slack.NewResponse()
 	if len(ud.Response.Beers.Items) != 0 {
 		var count int
-		sr = slack.NewResponse()
 		for _, item := range ud.Response.Beers.Items {
 			count++
+
 			attachment := &slack.Attachment{
-				Title: item.Title(),
-				// Text:     item.Text(),
-				// ImageURL: item.Beer.Label,
+				Title:      item.Title(),
 				CallbackID: callbackID,
 				Actions:    []*slack.Action{slack.NewAction(item.Beer.ID)},
 			}
+
 			sr.Attachments = append(sr.Attachments, attachment)
 
-			// TODO: add in actions to select from the list of options
-			// for now break after the first attachment so we only return
-			// a single result
-			if count == 5 {
+			if count == MaxResults {
 				break
 			}
 		}
 	} else {
-		sr = slack.NewEmptyResultsResponse()
+		sr = slack.NewEmptyResponse()
 	}
 
 	b, err := json.Marshal(sr)
 	if err != nil {
+		log.Printf("%+v", err)
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
