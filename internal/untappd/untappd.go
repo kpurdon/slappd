@@ -17,11 +17,11 @@ type Beer struct {
 	Style       string  `json:"beer_style"`
 	Description string  `json:"beer_description"`
 
-	// Slug is part of a Beer for some Untappd API endpoints
-	Slug string `json:"beer_slug,omitempty"`
-
-	// Brewery is nested in Beer for some Untappd API endpoints
-	Brewery *Brewery `json:"brewery,omitempty"`
+	// only available from the BeerInfo API
+	Slug        string   `json:"beer_slug,omitempty"`
+	RatingCount int      `json:"rating_count,omitempty"`
+	RatingScore float64  `json:"rating_score,omitempty"`
+	Brewery     *Brewery `json:"brewery,omitempty"`
 }
 
 // Brewery defines the shape of a Brewery from the Untappd API
@@ -45,5 +45,6 @@ func title(beer *Beer, brewery *Brewery) string {
 }
 
 func text(beer *Beer) string {
-	return fmt.Sprintf("%s | %d IBU | %0.0f%% ABV \n%s", beer.Style, beer.Ibu, beer.Abv, beer.Description)
+	format := "%s | %d IBU | %0.0f%% ABV | %0.02f rating (%d votes)\n%s"
+	return fmt.Sprintf(format, beer.Style, beer.Ibu, beer.Abv, beer.RatingScore, beer.RatingCount, beer.Description)
 }
