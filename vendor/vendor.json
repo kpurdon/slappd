@@ -1,0 +1,16 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"heroku": {
+		"goVersion":"go1.8"
+	},
+	"package": [
+		{
+			"checksumSHA1": "ynJSWoF6v+3zMnh9R0QmmG6iGV8=",
+			"path": "github.com/pkg/errors",
+			"revision": "bfd5150e4e41705ded2129ec33379de1cb90b513",
+			"revisionTime": "2017-02-27T22:00:37Z"
+		}
+	],
+	"rootPath": "github.com/kpurdon/slappd"
+}
