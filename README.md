@@ -1,6 +1,8 @@
 [![GoDoc](https://godoc.org/github.com/kpurdon/slappd?status.svg)](https://godoc.org/github.com/kpurdon/slappd)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kpurdon/slappd)](https://goreportcard.com/report/github.com/kpurdon/slappd)
 
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
 **If you are interested in donating public hosting for this application it would be very easy to let anyone on slack use this with the click of a button. Right now I am running it on a private host for only a couple slack teams.**
 
 # Slappd (Slack Untappd)
