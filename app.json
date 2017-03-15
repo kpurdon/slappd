@@ -1,0 +1,22 @@
+{
+  "name": "slappd",
+  "description": "Untappd Integration for Slack",
+  "keywords": [
+    "go",
+    "slack",
+    "untappd"
+  ],
+  "website": "https://kwp.io/slappd",
+  "repository": "https://github.com/kpurdon/slappd",
+  "env": {
+      "SLACK_TOKEN": {
+          "description": "The token assigned to the slash command integration (can contain multiple comma seperated tokens)"
+      },
+      "UNTAPPD_CLIENT_ID": {
+          "description": "Your Untappd API client ID"
+      },
+      "UNTAPPD_CLIENT_SECRET": {
+          "description": "Your Untappd API client secret token"
+      }
+  }
+}
